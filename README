@@ -1,0 +1,32 @@
+Ciobanu Alin-Matei 325CB
+
+
+	Functii definite:
+
+	- struct route_table_entry *get_best_route(__u32 dest_ip) : gaseste ruta dupa formula data printr-o
+	cautare binara care imi gaseste ultima ruta din fisierul sortat care se potriveste pt nexthopul
+	pachetului primit
+	- int cmp_prefix(const void *a, const void *b) : functia de comparare pentru qsort,
+	crescator dupa prefix si dupa masca, astfel in caz de prefix la fel, masca cea mai mare va fi cea
+	mai din dreapta.
+	- void create_new_packet(...): creez un pachet de tip icmp pe care il trimit ca raspuns in functie
+	de ce am nevoie: echo reply, time excedeed, destination unreachable
+
+	In main:
+	- primesc pachetul
+	- extrag headerul ether si verific daca este de tip IP
+	- extrag headerul ip
+	- prima data verific daca este de tip icmp, verificand protocolul, si daca pachetul imi este destinat
+	mie
+	- extrag headerul icmp si trimit raspuns daca este de tip icmp echo request, raspunzand cu echo reply
+	- incep procesul de forwarding
+	- verific checksum-ul sa fie diferit de 0, in caz contrat arunc pachetul
+	- daca ttl-ul este <= 1 creez un nou pachet si il trimit ca raspuns cu time excedeed
+	- calculez cea mai buna ruta pentru pachetul original
+	- daca nu o gasesc trimit ca raspuns un pachet icmp de tipul destination unreachable
+	- decrementez ttl, calculez checksum
+	- modific adresa mac destinatie a pachetului cu cea aflata din tabela arp
+	- trimit pachetul mai departe
+
+	Structurile definite sunt in skel.h
+	Functiile de parsare sunt in skel.c (folosesc strtok pentru a lua de pe fiecare linie ce am nevoie)
